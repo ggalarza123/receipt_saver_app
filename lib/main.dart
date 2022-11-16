@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const MainScreen(), //
-        '/add_receipt' : (context) => const AddReceiptScreen(),
+        '/add_receipt' : (context) => AddReceiptScreen(),
         '/view_receipts' : (context) => const ViewReceiptsScreen()
       },
     );
