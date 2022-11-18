@@ -21,4 +21,6 @@ class ViewReceiptsScreen extends StatelessWidget {
       ),
     );
   }
+
+
 }

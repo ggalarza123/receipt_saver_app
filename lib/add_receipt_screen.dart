@@ -1,8 +1,12 @@
 import 'dart:io';
+import 'dart:core';
 
+import 'package:http/http.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddReceiptScreen extends StatefulWidget {
   @override
@@ -13,6 +17,10 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
 
   XFile? imageFile;
 
+  @override
+  void initState() {
+    super.initState();
+  }
 
   _openGallery(BuildContext context) async {
     imageFile = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -93,7 +101,11 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
               ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                // saveImage(imageFile?.path);
+                saveFile();
+                // readFile();
+              },
               child: Container(
                 color: Colors.lightBlue,
                 padding:
@@ -109,4 +121,64 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
       ),
     );
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  void saveImage() async {
+    if (imageFile == null) {
+      return;
+    }
+
+
+    // SharedPreferences saveImage = await SharedPreferences.getInstance();
+    //
+    //  File file = File(imageFile!.path);
+    // print(Image.file(File(imageFile!.path)));
+  }
+
+
+  Future<String> getFilePath() async {
+    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
+    String appDocumentsPath = appDocumentsDirectory.path; // 2
+    String filePath = '$appDocumentsPath/demoTextFile.txt'; // 3
+
+    return filePath;
+  }
+
+  void saveFile() async {
+    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
+    String appDocumentsPath = appDocumentsDirectory.path; // 2
+    String filePath = '$appDocumentsPath/demoTextFile.txt';
+    File newImage = await File(imageFile!.path).copy('$filePath/image1.png');
+
+    // File file = File(await getFilePath());
+    // File file = File(imageFile!.path); // 1
+
+    // file.writeAsString("This is my demo text that will be saved to : demoTextFile.txt"); // 2
+  }
+
+  void readFile() async {
+    File file = File(await getFilePath()); // 1
+    String fileContent = await file.readAsString(); // 2
+
+    print('File Content: $fileContent');
+  }
+
 }
