@@ -1,12 +1,13 @@
+
 import 'dart:io';
 import 'dart:core';
+import 'dart:typed_data';
 
-import 'package:http/http.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:receipt_saver_app/database_adapter.dart';
+import 'package:receipt_saver_app/hive_service.dart';
+
 
 class AddReceiptScreen extends StatefulWidget {
   @override
@@ -14,26 +15,28 @@ class AddReceiptScreen extends StatefulWidget {
 }
 
 class _AddReceiptScreen extends State<AddReceiptScreen> {
-
-  XFile? imageFile;
-
+  DatabaseAdapter adapter = HiveService();
+  File? image;
   @override
   void initState() {
     super.initState();
   }
 
   _openGallery(BuildContext context) async {
-    imageFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    this.setState(() {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
 
+    final imageTemporary = File(image!.path);
+    this.setState(() {
+        this.image = imageTemporary;
     });
     Navigator.of(context).pop();
   }
 
   _openCamera(BuildContext context) async {
-    imageFile = await ImagePicker().pickImage(source: ImageSource.camera);
+    final image = await ImagePicker().pickImage(source: ImageSource.camera);
+    final imageTemporary = File(image!.path);
     this.setState(() {
-
+      this.image = imageTemporary;
     });
     Navigator.of(context).pop();
   }
@@ -68,13 +71,14 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
   }
 
   Widget _decideImageView() {
-    if (imageFile == null) {
+    if (image == null) {
       return Text("No Image Selected");
     } else {
-      return Image.file(File(imageFile!.path), height: 400, width: 400);
+      // return Text("photo returned here");
+      return Image.file(image!, height: 400, width: 400);
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +97,7 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
               child: Container(
                 color: Colors.lightBlue,
                 padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 child: const Text(
                   'Select Image',
                   style: TextStyle(color: Colors.white, fontSize: 28.0),
@@ -102,14 +106,12 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
             ),
             TextButton(
               onPressed: () {
-                // saveImage(imageFile?.path);
-                saveFile();
-                // readFile();
+                saveImage();
               },
               child: Container(
                 color: Colors.lightBlue,
                 padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 child: const Text(
                   'Save Image',
                   style: TextStyle(color: Colors.white, fontSize: 28.0),
@@ -122,63 +124,16 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
     );
   }
 
+  // converting the selected image into a Uint8List, bytearray list, the image will be in numbers.
+  // this iwll then be stored in the database
+ void saveImage() async {
+    Uint8List imageBytes = await image!.readAsBytes();
+    adapter.storeImage(imageBytes);
 
+ }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  void saveImage() async {
-    if (imageFile == null) {
-      return;
-    }
-
-
-    // SharedPreferences saveImage = await SharedPreferences.getInstance();
-    //
-    //  File file = File(imageFile!.path);
-    // print(Image.file(File(imageFile!.path)));
-  }
-
-
-  Future<String> getFilePath() async {
-    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
-    String appDocumentsPath = appDocumentsDirectory.path; // 2
-    String filePath = '$appDocumentsPath/demoTextFile.txt'; // 3
-
-    return filePath;
-  }
-
-  void saveFile() async {
-    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory(); // 1
-    String appDocumentsPath = appDocumentsDirectory.path; // 2
-    String filePath = '$appDocumentsPath/demoTextFile.txt';
-    File newImage = await File(imageFile!.path).copy('$filePath/image1.png');
-
-    // File file = File(await getFilePath());
-    // File file = File(imageFile!.path); // 1
-
-    // file.writeAsString("This is my demo text that will be saved to : demoTextFile.txt"); // 2
-  }
-
-  void readFile() async {
-    File file = File(await getFilePath()); // 1
-    String fileContent = await file.readAsString(); // 2
-
-    print('File Content: $fileContent');
-  }
+Future<List<Uint8List>?> readImagesFromDatabase() async {
+    return adapter.getImages();
+}
 
 }
