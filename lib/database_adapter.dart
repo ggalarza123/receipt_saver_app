@@ -6,4 +6,5 @@ abstract class DatabaseAdapter {
 
   Future<List<Uint8List>> getImages();
 
+  Future<void> storeImageDetails();
 }

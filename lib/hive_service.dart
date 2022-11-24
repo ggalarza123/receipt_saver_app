@@ -30,6 +30,9 @@ class HiveService extends DatabaseAdapter{
     throw UnimplementedError();
   }
 
+  @override
+  Future<void> storeImageDetails() async {
 
+  }
 
 }

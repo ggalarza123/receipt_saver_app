@@ -2,7 +2,6 @@
 import 'dart:io';
 import 'dart:core';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:receipt_saver_app/database_adapter.dart';
@@ -74,7 +73,7 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
     if (image == null) {
       return Text("No Image Selected");
     } else {
-      // return Text("photo returned here");
+      // photo returned here
       return Image.file(image!, height: 400, width: 400);
     }
   }
@@ -129,11 +128,10 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
  void saveImage() async {
     Uint8List imageBytes = await image!.readAsBytes();
     adapter.storeImage(imageBytes);
-
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Image Saved"),
+    ));
  }
 
-Future<List<Uint8List>?> readImagesFromDatabase() async {
-    return adapter.getImages();
-}
 
 }
