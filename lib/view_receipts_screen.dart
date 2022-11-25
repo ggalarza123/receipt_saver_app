@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'database_adapter.dart';
 import 'hive_service.dart';
@@ -12,6 +13,12 @@ class ViewReceiptsScreen extends StatefulWidget {
 
 class _ViewReceiptsScreen extends State<ViewReceiptsScreen> {
   DatabaseAdapter adapter = HiveService();
+
+
+  TextEditingController categoryController = TextEditingController();
+  TextEditingController notesController = TextEditingController();
+  TextEditingController amountController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
 
   @override
   void initState() {
@@ -35,7 +42,7 @@ class _ViewReceiptsScreen extends State<ViewReceiptsScreen> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    _showImageDetails(context);
+                    _showImageDetails(context, index);
                     // print(index);
                   },
                   child: Padding(
@@ -60,46 +67,68 @@ class _ViewReceiptsScreen extends State<ViewReceiptsScreen> {
     return adapter.getImages();
   }
 
-  Future<void> _showImageDetails(BuildContext context) {
+  Future<void> _showImageDetails(BuildContext context, int index) async{
+    // open box of image details
+    await Hive.openBox('imageDetails');
+    // grab the image details for this particular image selected
+    Hive.box('imageDetails').get(index);
+    // convert to a readable list by index
+    List currentImageDetails = Hive.box('imageDetails').get(index);
+    // setting the current details of the receipt
+    dateController = new TextEditingController(text: currentImageDetails[0]);
+    amountController = new TextEditingController(text: currentImageDetails[1]);
+    categoryController = new TextEditingController(text: currentImageDetails[2]);
+    notesController = new TextEditingController(text: currentImageDetails[3]);
+
+    // shows the details of the receipt
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Receipt Details", textAlign: TextAlign.center,),
+            title: Text(
+              "Receipt Details",
+              textAlign: TextAlign.center,
+            ),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
                   TextFormField(
+                    controller: dateController,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: 'Date: ',
                     ),
                   ),
                   TextFormField(
+                    controller: amountController,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: 'Amount: ',
+
                     ),
                   ),
                   TextFormField(
+                    controller: categoryController,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: 'Category: ',
                     ),
                   ),
                   TextFormField(
+                    controller: notesController,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: 'Notes: ',
                     ),
                   ),
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      saveImageDetails(index);
                     },
                     child: Container(
                       color: Colors.lightBlue,
-                      padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 10),
                       child: const Text(
                         'SAVE',
                         style: TextStyle(color: Colors.white, fontSize: 28.0),
@@ -107,12 +136,11 @@ class _ViewReceiptsScreen extends State<ViewReceiptsScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {
-                    },
+                    onPressed: () {},
                     child: Container(
                       color: Colors.red,
-                      padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 10),
                       child: const Text(
                         'DELETE',
                         style: TextStyle(color: Colors.white, fontSize: 28.0),
@@ -126,5 +154,15 @@ class _ViewReceiptsScreen extends State<ViewReceiptsScreen> {
         });
   }
 
-
+  void saveImageDetails(int id) async{
+    String category = categoryController.text;
+    String date = dateController.text;
+    String amount = amountController.text;
+    String notes = notesController.text;
+    await Hive.openBox('imageDetails');
+    Hive.box('imageDetails').putAt(id, [date, amount, category, notes]);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Image Details Saved"),
+    ));
+  }
 }

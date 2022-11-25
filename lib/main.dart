@@ -7,6 +7,7 @@ import './view_receipts_screen.dart';
 
 void main() async{
   await Hive.initFlutter();
+
   runApp(const MyApp());
 }
 
@@ -18,7 +19,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Receipt Saver',
       theme: ThemeData(
-
         primarySwatch: Colors.blue,
       ),
       initialRoute: '/',

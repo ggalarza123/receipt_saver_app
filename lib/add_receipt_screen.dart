@@ -8,6 +8,7 @@ import 'package:receipt_saver_app/database_adapter.dart';
 import 'package:receipt_saver_app/hive_service.dart';
 
 
+
 class AddReceiptScreen extends StatefulWidget {
   @override
   _AddReceiptScreen createState() => _AddReceiptScreen();
@@ -131,6 +132,7 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Image Saved"),
     ));
+
  }
 
 
