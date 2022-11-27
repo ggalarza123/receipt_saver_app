@@ -72,13 +72,20 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
   // Displays a text or image
   Widget _decideImageView() {
     if (image == null) {
-      return const Text("No Image Selected");
+      return const Padding(
+        padding: EdgeInsets.only(top: 60, bottom: 160, left: 0, right: 0),
+        child: Text("No Image Selected"),
+      );
     } else {
       // Photo returned here
-      return Image.file(image!, height: 400, width: 400);
+      return Padding(
+        padding: const EdgeInsets.only(top: 20, bottom: 10, left: 0, right: 0),
+        child: Image.file(image!, height: 400, width: 400),
+      );
     }
   }
 
+  // Initial display widget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,34 +94,53 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _decideImageView(),
-            TextButton(
-              onPressed: () {
-                _showChoiceDialog(context);
-              },
-              child: Container(
-                color: Colors.lightBlue,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                child: const Text(
-                  'Select Image',
-                  style: TextStyle(color: Colors.white, fontSize: 28.0),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.6,
+                child: ElevatedButton(
+                  onPressed: () {
+                    _showChoiceDialog(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.lightBlue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    elevation: 0.0,
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Text(
+                      'Select Image',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
                 ),
               ),
             ),
-            TextButton(
-              onPressed: () {
-                saveImage();
-              },
-              child: Container(
-                color: Colors.lightBlue,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                child: const Text(
-                  'Save Image',
-                  style: TextStyle(color: Colors.white, fontSize: 28.0),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.6,
+              child: ElevatedButton(
+                onPressed: () {
+                  saveImage();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightBlue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  elevation: 0.0,
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Text(
+                    'Save Image',
+                    style: TextStyle(fontSize: 20),
+                  ),
                 ),
               ),
             ),
@@ -124,8 +150,8 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
     );
   }
 
-  // converting the selected image into a Uint8List, bytearray list, the image will be in numbers.
-  // this iwll then be stored in the database
+  // Converting the selected image into a Uint8List, bytearray list, the image will be in numbers.
+  // This will then be stored in the database
   void saveImage() async {
     Uint8List imageBytes = await image!.readAsBytes();
     adapter.storeImage(imageBytes);

@@ -12,30 +12,46 @@ class MainScreen extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text("Hi Geo!",
-                style: TextStyle(fontSize: 34, color: Colors.black)),
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/view_receipts');
-              },
-              child: Container(
-                color: Colors.lightBlue,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                child: const Text(
-                  'View Receipts',
-                  style: TextStyle(color: Colors.white, fontSize: 28.0),
+            const Padding(
+              padding: EdgeInsets.only(top: 58, bottom: 150, right: 0, left: 0),
+              child: Text("Hi Geo!",
+                  style: TextStyle(fontSize: 34, color: Colors.black)),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 0, bottom: 30, left: 0, right: 0),
+              child: SizedBox(
+                width: 250,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/view_receipts');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.lightBlue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    elevation: 0.0,
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Text(
+                      'View Receipts',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
                 ),
               ),
             ),
             SizedBox.fromSize(
-              size: const Size(250, 250),
+              size: const Size(250, 200),
               child: Material(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
                 color: Colors.amberAccent,
                 child: InkWell(
-                  splashColor: Colors.green,
+                  splashColor: Colors.lightBlue,
                   onTap: () {
                     Navigator.pushNamed(context, '/add_receipt');
                   },
@@ -53,7 +69,7 @@ class MainScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

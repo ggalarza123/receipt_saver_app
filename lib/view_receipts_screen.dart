@@ -126,31 +126,52 @@ class _ViewReceiptsScreen extends State<ViewReceiptsScreen> {
                       labelText: 'Notes: ',
                     ),
                   ),
-                  TextButton(
-                    onPressed: () async {
-                      saveImageDetails(index);
-                    },
-                    child: Container(
-                      color: Colors.lightBlue,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 10),
-                      child: const Text(
-                        'SAVE',
-                        style: TextStyle(color: Colors.white, fontSize: 28.0),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 14, bottom: 8, left: 8, right: 8),
+                    child: SizedBox(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          saveImageDetails(index);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.lightBlue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          elevation: 0.0,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(15.0),
+                          child: Text(
+                            'SAVE',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      deleteImage(index);
-                    },
-                    child: Container(
-                      color: Colors.red,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 10),
-                      child: const Text(
-                        'DELETE',
-                        style: TextStyle(color: Colors.white, fontSize: 28.0),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          deleteImage(index);
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          elevation: 0.0,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(15.0),
+                          child: Text(
+                            'DELETE',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
                       ),
                     ),
                   ),
