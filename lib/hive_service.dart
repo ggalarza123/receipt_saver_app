@@ -29,8 +29,8 @@ class HiveService extends DatabaseAdapter{
 
     // creates a second box within Hive and stores an empty string list that will be filled later
     var box2 = await Hive.openBox('imageDetails');
-    box2.add(["","","",""]);
 
+    box2.add(["","","",""]);
   }
 
 
