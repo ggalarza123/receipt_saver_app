@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'dart:core';
 import 'dart:typed_data';
@@ -6,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:receipt_saver_app/database_adapter.dart';
 import 'package:receipt_saver_app/hive_service.dart';
-
-
 
 class AddReceiptScreen extends StatefulWidget {
   @override
@@ -17,6 +14,7 @@ class AddReceiptScreen extends StatefulWidget {
 class _AddReceiptScreen extends State<AddReceiptScreen> {
   DatabaseAdapter adapter = HiveService();
   File? image;
+
   @override
   void initState() {
     super.initState();
@@ -27,7 +25,7 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
 
     final imageTemporary = File(image!.path);
     this.setState(() {
-        this.image = imageTemporary;
+      this.image = imageTemporary;
     });
     Navigator.of(context).pop();
   }
@@ -41,24 +39,25 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
     Navigator.of(context).pop();
   }
 
+  // Opens a dialog for user to select Gallery or Camera in order to upload a receipt.
   Future<void> _showChoiceDialog(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Make a choice."),
+            title: const Text("Make a choice."),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
                   GestureDetector(
-                    child: Text("Gallery"),
+                    child: const Text("Gallery"),
                     onTap: () {
                       _openGallery(context);
                     },
                   ),
-                  Padding(padding: EdgeInsets.all(8.0)),
+                  const Padding(padding: EdgeInsets.all(8.0)),
                   GestureDetector(
-                    child: Text("Camera"),
+                    child: const Text("Camera"),
                     onTap: () {
                       _openCamera(context);
                     },
@@ -70,11 +69,12 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
         });
   }
 
+  // Displays a text or image
   Widget _decideImageView() {
     if (image == null) {
-      return Text("No Image Selected");
+      return const Text("No Image Selected");
     } else {
-      // photo returned here
+      // Photo returned here
       return Image.file(image!, height: 400, width: 400);
     }
   }
@@ -97,7 +97,7 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
               child: Container(
                 color: Colors.lightBlue,
                 padding:
-                const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 child: const Text(
                   'Select Image',
                   style: TextStyle(color: Colors.white, fontSize: 28.0),
@@ -111,7 +111,7 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
               child: Container(
                 color: Colors.lightBlue,
                 padding:
-                const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 child: const Text(
                   'Save Image',
                   style: TextStyle(color: Colors.white, fontSize: 28.0),
@@ -126,14 +126,11 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
 
   // converting the selected image into a Uint8List, bytearray list, the image will be in numbers.
   // this iwll then be stored in the database
- void saveImage() async {
+  void saveImage() async {
     Uint8List imageBytes = await image!.readAsBytes();
     adapter.storeImage(imageBytes);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text("Image Saved"),
     ));
-
- }
-
-
+  }
 }

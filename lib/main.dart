@@ -5,7 +5,7 @@ import 'package:receipt_saver_app/main_screen.dart';
 import './add_receipt_screen.dart';
 import './view_receipts_screen.dart';
 
-void main() async{
+void main() async {
   await Hive.initFlutter();
 
   runApp(const MyApp());
@@ -23,11 +23,11 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
+        // sets the initial screen to MainScreen
         '/': (context) => const MainScreen(), //
-        '/add_receipt' : (context) => AddReceiptScreen(),
-        '/view_receipts' : (context) => ViewReceiptsScreen()
+        '/add_receipt': (context) => AddReceiptScreen(),
+        '/view_receipts': (context) => ViewReceiptsScreen()
       },
     );
   }
-
 }
