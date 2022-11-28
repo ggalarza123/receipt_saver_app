@@ -19,7 +19,8 @@ class MainScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 34, color: Colors.black)),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 0, bottom: 30, left: 0, right: 0),
+              padding:
+                  const EdgeInsets.only(top: 0, bottom: 30, left: 0, right: 0),
               child: SizedBox(
                 width: 250,
                 child: ElevatedButton(
