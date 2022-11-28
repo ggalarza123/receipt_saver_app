@@ -197,6 +197,9 @@ class _ViewReceiptsScreen extends State<ViewReceiptsScreen> {
   // Delete image calling the adapter method
   void deleteImage(int index) async {
     adapter.deleteImage(index);
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("Image Deleted"),
+    ));
     // Resets the view receipts screen to reflect the deleted image
     setState(() {
       _ViewReceiptsScreen();
