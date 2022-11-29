@@ -94,7 +94,6 @@ class _AddReceiptScreen extends State<AddReceiptScreen> {
       ),
       body: Center(
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _decideImageView(),
             Padding(
