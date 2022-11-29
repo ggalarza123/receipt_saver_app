@@ -35,10 +35,11 @@ class _ViewReceiptsScreen extends State<ViewReceiptsScreen> {
       body: FutureBuilder<List<Uint8List>?>(
         future: _readImagesFromDatabase(),
         builder: (context, AsyncSnapshot<List<Uint8List>?> snapshot) {
-          if (snapshot.data == null) {
-            return const Text("Nothing has been selected.");
+          if (snapshot.hasError) {
+            return const Text("Nothing to show");
           }
           if (snapshot.hasData) {
+            if (snapshot.data == null) return const Text("Nothing to show");
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
@@ -48,6 +49,7 @@ class _ViewReceiptsScreen extends State<ViewReceiptsScreen> {
                     _showImageDetails(context, index);
                   },
                   child: Padding(
+                    // Adding padding to the receipt images to more easily see where a new one starts
                     padding: const EdgeInsets.all(8.0),
                     child: Image.memory(
                       snapshot.data![index],
